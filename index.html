@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Events & Festivals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-text: #3730a3;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-light: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+    .container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* Header Navigation */
+    .header { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 100; }
+    .header-content { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 800; font-size: 1.25rem; color: var(--text-main); text-decoration: none; }
+    .logo-badge { background: var(--primary); color: #fff; padding: 0.35rem 0.65rem; border-radius: var(--radius-sm); font-size: 1.1rem; }
+    .nav-btn { text-decoration: none; font-size: 0.875rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); background: #fff; color: var(--text-main); transition: all 0.2s; }
+    .nav-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary-light); }
+
+    /* Hero */
+    .hero { padding: 3rem 0 2rem; text-align: center; }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.5rem; }
+    .hero p { color: var(--text-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
+
+    /* Filter Bar */
+    .filters-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.5rem; border: 1px solid var(--border-light); box-shadow: var(--shadow-md); margin-bottom: 2.5rem; }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; align-items: end; }
+    .filter-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+    .input-control { width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border-light); border-radius: var(--radius-md); font-size: 0.925rem; font-family: inherit; background: #fff; color: var(--text-main); }
+    .input-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.65rem 1.25rem; font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border-light); }
+    .btn-secondary:hover { background: #e2e8f0; color: var(--text-main); }
+
+    /* Cards Grid */
+    .events-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .events-header h2 { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; }
+    .counter-badge { background: var(--primary-light); color: var(--primary-text); font-size: 0.85rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 999px; }
+    .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+
+    /* Card Layout with Image */
+    .event-card { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); padding: 0; overflow: hidden; display: flex; flex-direction: column; transition: all 0.25s ease; }
+    .event-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+    .event-image-container { position: relative; width: 100%; height: 180px; background-color: #f1f5f9; }
+    .event-image { width: 100%; height: 100%; object-fit: cover; }
+    .event-image-container .event-tag { position: absolute; top: 12px; left: 12px; margin-bottom: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
+    .event-tag { display: inline-block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.3rem 0.75rem; border-radius: 999px; }
+    .tag-festival { background: #fef3c7; color: #92400e; }
+    .tag-community { background: #d1fae5; color: #065f46; }
+    .tag-music { background: #ede9fe; color: #5b21b6; }
+    .tag-food { background: #fee2e2; color: #991b1b; }
+    .tag-sports { background: #e0f2fe; color: #075985; }
+    .tag-cultural { background: #fce7f3; color: #9d174d; }
+    .tag-other { background: #f1f5f9; color: #334155; }
+
+    .event-card-body { padding: 1.25rem; display: flex; flex-direction: column; flex-grow: 1; }
+    .event-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main); }
+    .event-info { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .event-desc { font-size: 0.925rem; color: #475569; margin-bottom: 1rem; line-height: 1.5; }
+
+    .no-events-box { text-align: center; padding: 4rem 1.5rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px dashed var(--border-light); color: var(--text-muted); }
+    .hidden { display: none !important; }
+
+    .footer { margin-top: auto; padding: 2rem 0; text-align: center; color: var(--text-muted); font-size: 0.875rem; border-top: 1px solid var(--border-light); background: var(--bg-card); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">
+        <span class="logo-badge">📍</span>
+        <span>Local Events Hub</span>
+      </a>
+      <a href="admin.html" class="nav-btn">🔒 Admin Portal</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Explore Local Events & Festivals</h1>
+      <p>Discover activities, gatherings, and events in your neighborhood</p>
+    </section>
+
+    <!-- Filter Toolbar -->
+    <section class="filters-card">
+      <div class="filter-grid">
+        <div class="filter-group">
+          <label for="search">Search Keywords</label>
+          <input type="text" id="search" class="input-control" placeholder="Search title or details...">
+        </div>
+        <div class="filter-group">
+          <label for="category">Category</label>
+          <select id="category" class="input-control">
+            <option value="">All Categories</option>
+            <option value="Festival">Festival</option>
+            <option value="Community">Community</option>
+            <option value="Music">Music</option>
+            <option value="Food">Food</option>
+            <option value="Sports">Sports</option>
+            <option value="Cultural">Cultural</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="location">Location</label>
+          <select id="location" class="input-control">
+            <option value="">All Locations</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Event Cards Feed -->
+    <section>
+      <div class="events-header">
+        <h2>Upcoming Events <span id="event-count" class="counter-badge">0</span></h2>
+      </div>
+      <div id="events-list" class="events-grid"></div>
+      <div id="no-events" class="no-events-box hidden">
+        <h3>No matching events found</h3>
+        <p>Try adjusting your search terms or filters.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Local Event & Festival Directory · Open Community Portal</p>
+    </div>
+  </footer>
+
+  <!-- Firebase Compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- Application JS -->
+  <script src="app.js"></script>
+</body>
+</html>
